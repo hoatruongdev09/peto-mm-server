@@ -1,14 +1,9 @@
 import net from 'net'
 import { spawn } from 'child_process'
-import { networkInterfaces } from 'os'
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-const linuxProcessPath = __dirname + './server.x86_64'
+const linuxProcessPath = './server.x86_64'
 
 const getNetworkIP = (callback) => {
     var socket = net.createConnection(80, "www.google.com");
@@ -27,12 +22,17 @@ const createInstance = (gameId) => {
     const port = 8001
 
     const args = ["-game_id", `${gameId}`, "-host", `${host}`, "-port", `${port}`]
-    const child = spawn(linuxProcessPath, args)
+    try {
 
-    child.stdout.on("spawn", () => {
-        console.log(`instance ${gameId} spawned`)
-    })
+        const child = spawn(linuxProcessPath, args)
 
+        child.stdout.on("spawn", () => {
+            console.log(`instance ${gameId} spawned`)
+        })
+
+    } catch (err) {
+
+    }
     return {
         gameId, host, port
     }
