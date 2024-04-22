@@ -1,12 +1,11 @@
 import db from '../db/db.js'
 
-export const createMatchInfo = async (matchMode, instanceHost, instancePort, duration) => {
+export const createMatchInfo = async (matchMode, instanceHost, instancePort) => {
     try {
         const newMatch = await db.getRepository("Match").save({
             mode: matchMode,
             instance_host: instanceHost,
             instance_port: instancePort,
-            duration: duration,
             is_over: false
         })
         return newMatch
