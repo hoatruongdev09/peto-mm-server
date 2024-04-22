@@ -56,4 +56,6 @@ const createInstance = (gameId) => {
     }
 }
 
-export default createInstance
+export {
+    hostIP, createInstance
+}
