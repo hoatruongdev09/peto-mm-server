@@ -82,7 +82,7 @@ class MatchMakingController {
                 })
             })
             await addPlayerToMatch(match.id, players)
-            // createInstance(match.id)
+            createInstance(match.id)
             queue.broadcast(socketEventId.matchCreated, {
                 match_id: match.id
             })
