@@ -29,8 +29,14 @@ export class ArenaSoleQueue {
     }
 
     addPlayer = (socket) => {
+        socket.team = 1
         const userId = socket.userId
-        this.players.push({ userId: socket.userId, socket })
+        this.players.push({
+            userId: socket.userId,
+            isBot: false,
+            findMatchData: socket.findMatchData,
+            socket
+        })
         socket.on('disconnect', (socket) => this.playerDisconnect(userId))
         const playersData = {
             current: this.players.length,

@@ -11,6 +11,6 @@ app.get('/', (req, res) => {
     res.status(200).json({ result: "ok" })
 })
 
-app.use('/match', matchRoute)
+app.use('/v1/match', matchRoute)
 
 export default app

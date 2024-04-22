@@ -23,7 +23,15 @@ const MatchPlayer = new EntitySchema({
         },
         position: {
             type: 'int',
-            default: null
+            default: 0
+        },
+        team: {
+            type: 'int',
+            default: 1
+        },
+        bot: {
+            type: 'boolean',
+            default: false,
         }
     },
     relations: {

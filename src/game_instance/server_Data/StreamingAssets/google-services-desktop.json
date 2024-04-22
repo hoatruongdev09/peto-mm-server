@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "318200339982",
+    "project_id": "petopia-7c2c8",
+    "storage_bucket": "petopia-7c2c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318200339982:android:9b56dbb1b0aeb5216ae65f",
+        "android_client_info": {
+          "package_name": "co.mirailabs.petopia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318200339982-me867e6fh222mm2dfm98gddkbvg0ottv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Gd-rPMki6sliwEIzEfgXeLICQC16ms0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318200339982-me867e6fh222mm2dfm98gddkbvg0ottv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-1621210468605634~2011007125"
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,13 @@
 import db from '../db/db.js'
 
-export const createMatchInfo = async (matchMode) => {
+export const createMatchInfo = async (matchMode, instanceHost, instancePort, duration) => {
     try {
         const newMatch = await db.getRepository("Match").save({
-            mode: matchMode
+            mode: matchMode,
+            instance_host: instanceHost,
+            instance_port: instancePort,
+            duration: duration,
+            is_over: false
         })
         return newMatch
     } catch (err) {
@@ -16,9 +20,9 @@ export const getMatchInfo = async (matchId) => {
         const match = await db.getRepository("Match").findOne({ where: { id: matchId } })
         if (match == null) { return null }
         const players = await db.getRepository("MatchPlayer").find({ where: { match_id: matchId } })
+
         return {
-            id: matchId,
-            mode: match.mode,
+            ...match,
             players: players
         }
     } catch (err) {

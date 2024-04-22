@@ -69,13 +69,15 @@ class MatchMakingController {
             const match = await createMatchInfo(queue.getMode())
             const players = []
             queue.players.forEach(player => {
-                const { userId, socket } = player
-                const { hero, weapon, hero_skin } = socket.findMatchData
+                const { userId, isBot, findMatchData } = player
+                const { hero, weapon, hero_skin, team } = findMatchData
                 players.push({
                     user_id: userId,
                     hero,
                     weapon,
-                    hero_skin
+                    hero_skin,
+                    team,
+                    bot: isBot
                 })
             })
             await addPlayerToMatch(match.id, players)

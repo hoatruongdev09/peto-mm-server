@@ -8,13 +8,13 @@ router.get('/:id', async (req, res) => {
     console.log("find match by id: ", id)
     try {
         res.status(200).json({
-            status: "ok",
+            status: true,
             data: await getMatchInfo(id)
         })
     } catch (err) {
         res.status(500).json({
-            status: "error",
-            message: err.message
+            status: false,
+            error: err.message
         })
     }
 })
