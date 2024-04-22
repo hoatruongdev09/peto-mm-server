@@ -1,9 +1,12 @@
 import net from 'net'
 import { spawn } from 'child_process'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
-
-const linuxProcessPath = './server.x86_64'
+const linuxProcessPath = __dirname + '/server.x86_64'
 
 const getNetworkIP = (callback) => {
     var socket = net.createConnection(80, "www.google.com");
