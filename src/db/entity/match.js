@@ -23,9 +23,6 @@ const Match = new EntitySchema({
         is_over: {
             type: 'boolean',
             default: false
-        },
-        duration: {
-            type: 'bigint'
         }
     }
 })
