@@ -1,6 +1,7 @@
 import { ArenaSoleQueue, ARENA_SOLE_MODE } from "./queues/arena-sole-queue.js";
 import { createMatchInfo, addPlayerToMatch } from '../../provider/match.provider.js'
 import socketEventId from "../socket-event-id.js";
+import createInstance from "../../game_instance/game-runner.js";
 
 class MatchMakingController {
     constructor() {
@@ -81,6 +82,7 @@ class MatchMakingController {
                 })
             })
             await addPlayerToMatch(match.id, players)
+            createInstance(match.id)
             queue.broadcast(socketEventId.matchCreated, {
                 match_id: match.id
             })
