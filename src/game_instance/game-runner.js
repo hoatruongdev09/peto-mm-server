@@ -26,9 +26,24 @@ const createInstance = (gameId) => {
 
         const child = spawn(linuxProcessPath, args)
 
-        child.stdout.on("spawn", () => {
-            console.log(`instance ${gameId} spawned`)
-        })
+        child.stdout.on("data", (data) => {
+            console.log(`match ${gameId} ${port} data: ${data}`);
+        });
+        child.on("spawn", () => {
+            console.log(`match ${gameId} ${port} spawned`);
+        });
+        child.on("disconnect", (code, signal) => {
+            console.log(`match ${gameId} ${port} closed ${code} ${signal}`);
+        });
+        child.on("message", (code, signal) => {
+            console.log(`match ${gameId} ${port} message ${code} ${signal}`);
+        });
+        child.on("error", (code, signal) => {
+            console.log(`match ${gameId} ${port} error ${code} ${signal}`);
+        });
+        child.on("exit", (code, signal) => {
+            console.log(`match ${gameId} ${port} exit ${code} ${signal}`);
+        });
 
     } catch (err) {
 
