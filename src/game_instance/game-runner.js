@@ -31,8 +31,8 @@ for (let i = 8001; i < 9999; i++) {
 const createHostData = () => {
     let port = 8001
     for (; port < 9999; port++) {
-        if (portMap[port]) { continue }
-        portMap[port] = true
+        if (portMap.get(port)) { continue }
+        portMap.set(port, true)
         break
     }
     return {
