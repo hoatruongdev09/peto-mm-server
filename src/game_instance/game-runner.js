@@ -17,12 +17,30 @@ const getNetworkIP = (callback) => {
 }
 
 let hostIP = "localhost"
-getNetworkIP((address) => { hostIP = address })
+getNetworkIP((address) => {
+    hostIP = address
+    console.log("address: ", address)
+})
 
+const portMap = new Map()
 
-const createInstance = (gameId) => {
-    const host = hostIP
-    const port = 8001
+for (let i = 8001; i < 9999; i++) {
+    portMap.set(i, false)
+}
+
+const createHostData = () => {
+    let port = 8001
+    for (; port < 9999; port++) {
+        if (portMap[port]) { continue }
+        portMap[port] = true
+        break
+    }
+    return {
+        host: hostIP,
+        port
+    }
+}
+const createInstance = (gameId, host, port) => {
 
     const args = ["-game_id", `${gameId}`, "-host", `${host}`, "-port", `${port}`]
     try {
@@ -46,16 +64,15 @@ const createInstance = (gameId) => {
         });
         child.on("exit", (code, signal) => {
             console.log(`match ${gameId} ${port} exit ${code} ${signal}`);
+            portMap.set(port, false)
         });
 
     } catch (err) {
-
-    }
-    return {
-        gameId, host, port
+        console.error(err)
     }
 }
-
 export {
-    hostIP, createInstance
+    hostIP,
+    createInstance,
+    createHostData
 }
