@@ -90,10 +90,10 @@ export class ArenaSoleQueue {
     }
 
     dispose = () => {
-        setTimeout(10000, () => {
+        setTimeout(() => {
             this.players.forEach(player => {
                 player.socket.disconnect()
-            })
+            }, 10000)
         })
     }
 }
