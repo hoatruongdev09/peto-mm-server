@@ -29,6 +29,7 @@ export class ArenaSoleQueue {
         this.addBotTimeOutId = setTimeout(this.onAddBotTimeOut, ARENA_SOLE_ADD_BOT_TIMEOUT)
     }
     onAddBotTimeOut = () => {
+        if (this.isConfirmed) { return; }
         this.addBot()
         this.addBotTimeOutId = setTimeout(this.onAddBotTimeOut, ARENA_SOLE_ADD_BOT_TIMEOUT)
     }
