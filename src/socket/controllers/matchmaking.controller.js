@@ -69,18 +69,17 @@ class MatchMakingController {
         try {
             const { host, port } = createHostData()
             const match = await createMatchInfo(queue.getMode(), host, port)
-            const players = []
-            queue.players.forEach(player => {
+            const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
                 const { hero, weapon, hero_skin, team } = findMatchData
-                players.push({
+                return {
                     user_id: userId,
                     hero,
                     weapon,
                     hero_skin,
                     team,
                     bot: isBot
-                })
+                }
             })
             await addPlayerToMatch(match.id, players)
             createInstance(match.id, host, port)

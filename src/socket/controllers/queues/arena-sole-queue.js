@@ -1,10 +1,11 @@
 
 export const ARENA_SOLE_MODE = "arena_sole"
-export const ARENA_SOLE_MODE_PLAYERS = 2
-export const ARENA_SOLE_QUEUE_TIMEOUT = 30000
+export const ARENA_SOLE_MODE_PLAYERS = 8
+export const ARENA_SOLE_QUEUE_TIMEOUT = 1000
+export const ARENA_SOLE_ADD_BOT_TIMEOUT = 5000
 
 import socketEventIds from "../../socket-event-id.js";
-
+import randomHero from './bot-data-set.js'
 export class ArenaSoleQueue {
     constructor(averageElo, region, onConfirmMatch) {
         this.averageElo = averageElo
@@ -15,6 +16,7 @@ export class ArenaSoleQueue {
         this.isConfirmed = false
 
         this.timeOutId = setTimeout(this.onTimeOut, ARENA_SOLE_QUEUE_TIMEOUT);
+        this.addBotTimeOutId = null
     }
 
     getMode = () => { return ARENA_SOLE_MODE }
@@ -24,32 +26,82 @@ export class ArenaSoleQueue {
     }
 
     onTimeOut = () => {
-        this.isConfirmed = true
-        this.onConfirmMatch(true, this)
+        this.addBotTimeOutId = setTimeout(this.onAddBotTimeOut, ARENA_SOLE_ADD_BOT_TIMEOUT)
+    }
+    onAddBotTimeOut = () => {
+        this.addBot()
+        this.addBotTimeOutId = setTimeout(this.onAddBotTimeOut, ARENA_SOLE_ADD_BOT_TIMEOUT)
     }
 
     addPlayer = (socket) => {
-        socket.team = 1
         const userId = socket.userId
-        this.players.push({
+        const playerData = {
             userId: socket.userId,
             isBot: false,
-            findMatchData: socket.findMatchData,
+            findMatchData: {
+                ...socket.findMatchData,
+                team: 1
+            },
             socket
-        })
-        socket.on('disconnect', (socket) => this.playerDisconnect(userId))
+        }
+        this.removeBot(1)
+        this.doAddPlayer(playerData);
+
+        socket.on('disconnect', () => this.playerDisconnect(userId));
+    }
+
+
+    doAddPlayer(playerData) {
+        this.players.push(playerData);
         const playersData = {
             current: this.players.length,
             max: ARENA_SOLE_MODE_PLAYERS
-        }
-        this.broadcast(socketEventIds.queuePlayerChanges, playersData)
+        };
+        this.broadcast(socketEventIds.queuePlayerChanges, playersData);
 
         if (this.players.length == ARENA_SOLE_MODE_PLAYERS) {
-            this.confirmQueue()
+            this.confirmQueue();
+        }
+    }
+
+    randomBotId = () => {
+        let id = Math.floor(Math.random() * 99999)
+        const usedIds = this.players.map(player => player.userId)
+        while (usedIds.indexOf(id) != -1) {
+            id = Math.floor(Math.random() * 99999)
+        }
+        return id
+    }
+
+    addBot = () => {
+        const heroData = randomHero()
+        const playerData = {
+            userId: this.randomBotId(),
+            isBot: true,
+            findMatchData: {
+                ...heroData,
+                team: 1
+            }
+        }
+        console.log("add bott: ", playerData)
+        this.doAddPlayer(playerData);
+    }
+
+    removeBot = (count) => {
+        let currentCount = 0;
+        for (let i = this.players.length - 1; i >= 0; i--) {
+            if (this.players[i].isBot) {
+                this.players.splice(i, 1)
+                currentCount++
+            }
+            if (currentCount == count) { break }
         }
     }
 
     confirmQueue = () => {
+        if (this.addBotTimeOutId != null) {
+            clearTimeout(this.addBotTimeOutId)
+        }
         clearTimeout(this.timeOutId)
         this.isConfirmed = true
         this.onConfirmMatch(true, this)
@@ -69,8 +121,7 @@ export class ArenaSoleQueue {
 
             break
         }
-
-        if (this.players.length == 0) {
+        if (this.players.filter(player => !player.isBot).length == 0) {
             this.cancelQueue()
             return
         }
@@ -79,6 +130,9 @@ export class ArenaSoleQueue {
 
     cancelQueue = () => {
         clearTimeout(this.timeOutId)
+        if (this.addBotTimeOutId != null) {
+            clearTimeout(this.addBotTimeOutId)
+        }
         this.isConfirmed = true
         this.onConfirmMatch(false, this)
     }
@@ -90,9 +144,10 @@ export class ArenaSoleQueue {
     }
 
     dispose = () => {
+        console.log("disposed queue")
         setTimeout(() => {
             this.players.forEach(player => {
-                player.socket.disconnect()
+                player.socket?.disconnect()
             }, 10000)
         })
     }
