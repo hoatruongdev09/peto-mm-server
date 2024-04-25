@@ -2,7 +2,7 @@ import net from 'net'
 import { spawn } from 'child_process'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-const fs = require('node:fs');
+import fs from 'fs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
