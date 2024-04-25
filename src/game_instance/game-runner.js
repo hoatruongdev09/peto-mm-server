@@ -43,7 +43,7 @@ const createHostData = () => {
 }
 const saveInstanceLog = (name, logs) => {
     const content = logs.join('\n')
-    fs.writeFile(`./logs/${name}.txt`, content, err => {
+    fs.writeFile(`${__dirname}/logs/${name}.txt`, content, err => {
         if (err) {
             console.error('save log error', err);
         } else {
