@@ -56,7 +56,7 @@ const createInstance = (gameId, host, port) => {
     const args = ["-game_id", `${gameId}`, "-host", `${host}`, "-port", `${port}`]
     try {
 
-        const logName = `log_${game_id}`;
+        const logName = `log_${gameId}`;
         const logs = []
         const child = spawn(linuxProcessPath, args)
 
