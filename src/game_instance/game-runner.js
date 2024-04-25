@@ -1,6 +1,6 @@
 import net from 'net'
 import { spawn } from 'child_process'
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs'
 
@@ -43,7 +43,8 @@ const createHostData = () => {
 }
 const saveInstanceLog = (name, logs) => {
     const content = logs.join('\n')
-    fs.writeFile(`${__dirname}/logs/${name}.txt`, content, err => {
+    const savePath = path.join(__dirname, "logs", `${name}.txt`)
+    fs.writeFile(savePath, content, 'utf8', err => {
         if (err) {
             console.error('save log error', err);
         } else {
