@@ -21,17 +21,17 @@ export const createMatchInfo = async (matchMode, instanceHost, instancePort) => 
 const calculateBettingData = (betPlayerCount, pool) => {
     const poolReward = pool - MATCH_BETTING_FEE * betPlayerCount
 
-    if (betPlayerCount == 2) {
-        return [poolReward]
-    } else if (betPlayerCount == 3 || betPlayerCount == 4) {
-        return [poolReward * 0.8, poolReward * 0.2]
-    } else if (betPlayerCount == 5 || betPlayerCount == 6) {
-        return [poolReward * 0.65, poolReward * 0.2, poolReward * 0.15]
-    } else if (betPlayerCount == 7 || betPlayerCount == 8) {
-        return [poolReward * 0.5, poolReward * 0.2, poolReward * 0.16, poolReward * 0.14]
-    } else {
-        return null
-    }
+    // if (betPlayerCount == 2) {
+    //     return [poolReward]
+    // } else if (betPlayerCount == 3 || betPlayerCount == 4) {
+    //     return [poolReward * 0.8, poolReward * 0.2]
+    // } else if (betPlayerCount == 5 || betPlayerCount == 6) {
+    //     return [poolReward * 0.65, poolReward * 0.2, poolReward * 0.15]
+    // } else if (betPlayerCount == 7 || betPlayerCount == 8) {
+    return [poolReward * 0.5, poolReward * 0.2, poolReward * 0.16, poolReward * 0.14]
+    // } else {
+    //     return null
+    // }
 }
 
 export const getMatchInfo = async (matchId) => {
