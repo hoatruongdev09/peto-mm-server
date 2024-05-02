@@ -32,6 +32,10 @@ const MatchPlayer = new EntitySchema({
         bot: {
             type: 'boolean',
             default: false,
+        },
+        betting_amount: {
+            type: 'bigint',
+            default: null
         }
     },
     relations: {

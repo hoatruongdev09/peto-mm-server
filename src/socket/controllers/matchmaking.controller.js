@@ -1,5 +1,5 @@
 import { ArenaSoleQueue, ARENA_SOLE_MODE } from "./queues/arena-sole-queue.js";
-import { createMatchInfo, addPlayerToMatch } from '../../provider/match.provider.js'
+import { createMatchInfo, addPlayerToMatch, MATCH_BETTING_AMOUNT } from '../../provider/match.provider.js'
 import socketEventId from "../socket-event-id.js";
 import { createInstance, createHostData } from "../../game_instance/game-runner.js";
 
@@ -71,14 +71,15 @@ class MatchMakingController {
             const match = await createMatchInfo(queue.getMode(), host, port)
             const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
-                const { hero, weapon, hero_skin, team } = findMatchData
+                const { hero, weapon, hero_skin, team, has_betting } = findMatchData
                 return {
                     user_id: userId,
                     hero,
                     weapon,
                     hero_skin,
                     team,
-                    bot: isBot
+                    bot: isBot,
+                    betting_amount: has_betting ? MATCH_BETTING_AMOUNT : null
                 }
             })
             await addPlayerToMatch(match.id, players)
