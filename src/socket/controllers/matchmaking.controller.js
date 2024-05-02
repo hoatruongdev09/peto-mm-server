@@ -78,7 +78,7 @@ class MatchMakingController {
                     hero_skin,
                     team,
                     bot: isBot,
-                    betting_amount: has_betting ? MATCH_BETTING_AMOUNT : null
+                    betting_amount: (has_betting != null && has_betting.toLowerCase()) === "true" ? MATCH_BETTING_AMOUNT : null
                 }
             })
             await addPlayerToMatch(match.id, players)
