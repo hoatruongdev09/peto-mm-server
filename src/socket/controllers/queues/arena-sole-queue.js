@@ -37,7 +37,7 @@ export class ArenaSoleQueue {
     addPlayer = (socket) => {
         const userId = socket.userId
 
-        console.log(`${userId} join match making: `, ...socket.findMatchData)
+        console.log(`${userId} join match making: `, socket.findMatchData)
         const playerData = {
             userId: socket.userId,
             isBot: false,
