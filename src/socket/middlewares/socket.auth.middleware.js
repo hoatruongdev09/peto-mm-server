@@ -5,7 +5,7 @@ const authenticate = (socket, next) => {
 
     const { token, hero, weapon, mode = "arena_sole", region = "vn", hero_skin = 1, has_betting = false } = socket.handshake.query
     const { user_id, iat } = jwtDecode(token)
-
+    console.log("has betting: ", has_betting)
     socket.userId = user_id
     socket.userElo = 0
     socket.findMatchData = {

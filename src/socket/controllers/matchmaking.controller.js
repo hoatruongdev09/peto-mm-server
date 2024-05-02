@@ -9,7 +9,6 @@ class MatchMakingController {
     }
 
     joinMatchMaking = (socket) => {
-        console.log("join match making")
         const { region, mode } = socket.findMatchData
         const queue = this.getOrCreateQueue(socket.userElo, region, mode)
         if (queue == null) {
