@@ -81,6 +81,7 @@ class MatchMakingController {
                     betting_amount: (has_betting != null && has_betting.toLowerCase()) === "true" ? MATCH_BETTING_AMOUNT : null
                 }
             })
+            console.log("match player: ", players)
             await addPlayerToMatch(match.id, players)
             createInstance(match.id, host, port)
             queue.broadcast(socketEventId.matchCreated, {
