@@ -12,14 +12,6 @@ const Match = new EntitySchema({
         mode: {
             type: 'varchar'
         },
-        instance_host: {
-            type: 'varchar',
-            nullable: true,
-        },
-        instance_port: {
-            type: 'int',
-            nullable: true
-        },
         is_over: {
             type: 'boolean',
             default: false

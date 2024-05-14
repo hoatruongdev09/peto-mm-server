@@ -37,14 +37,6 @@ const MatchPlayer = new EntitySchema({
             type: 'bigint',
             default: null
         }
-    },
-    relations: {
-        match_id: {
-            target: 'Match',
-            type: 'one-to-one',
-            joinTable: true,
-            cascade: true
-        }
     }
 })
 

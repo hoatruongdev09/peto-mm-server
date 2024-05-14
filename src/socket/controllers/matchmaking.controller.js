@@ -1,7 +1,7 @@
 import { ArenaSoleQueue, ARENA_SOLE_MODE } from "./queues/arena-sole-queue.js";
-import { createMatchInfo, addPlayerToMatch, MATCH_BETTING_AMOUNT } from '../../provider/match.provider.js'
+import { createMatchInfo, addPlayerToMatch, MATCH_BETTING_AMOUNT, createMatchMakingData } from '../../provider/match.provider.js'
 import socketEventId from "../socket-event-id.js";
-import { createInstance, createHostData } from "../../game_instance/game-runner.js";
+import { createInstance } from "../../game_instance/game-runner.js";
 
 class MatchMakingController {
     constructor() {
@@ -65,8 +65,7 @@ class MatchMakingController {
 
     createMatchForQueue = async (queue) => {
         try {
-            const { host, port } = createHostData()
-            const match = await createMatchInfo(queue.getMode(), host, port)
+            const match = await createMatchInfo(queue.getMode())
             const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
                 const { hero, weapon, hero_skin, team, has_betting } = findMatchData
@@ -81,11 +80,12 @@ class MatchMakingController {
                 }
             })
             await addPlayerToMatch(match.id, players)
-            createInstance(match.id, host, port)
+
+            const { data } = await createInstance(match.id)
+            console.log("match making data: ", data)
+            await createMatchMakingData(match.id, data.request_id)
             queue.broadcast(socketEventId.matchCreated, {
                 match_id: match.id,
-                host,
-                port
             })
         } catch (err) {
             console.error(err)

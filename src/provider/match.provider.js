@@ -1,15 +1,16 @@
 import db from '../db/db.js'
+import Match from '../db/entity/match.js'
 import MatchPlayer from '../db/entity/match.player.js'
+import MatchMaking from '../db/entity/matchmaking.js'
+import { deleteInstance, getInstanceInfo } from '../game_instance/game-runner.js'
 
 export const MATCH_BETTING_AMOUNT = 900
 export const MATCH_BETTING_FEE = 90
 
-export const createMatchInfo = async (matchMode, instanceHost, instancePort) => {
+export const createMatchInfo = async (matchMode) => {
     try {
         const newMatch = await db.getRepository("Match").save({
             mode: matchMode,
-            instance_host: instanceHost,
-            instance_port: instancePort,
             is_over: false
         })
         return newMatch
@@ -52,6 +53,7 @@ export const getMatchInfo = async (matchId) => {
     }
 }
 
+
 export const addPlayerToMatch = async (matchId, players) => {
     try {
         const repo = db.getRepository("MatchPlayer")
@@ -72,6 +74,48 @@ export const findPlayerInMatch = async (playerId, matchId) => {
             .where("player.match_id = :matchId AND player.user_id = :playerId", { matchId: matchId, playerId: playerId })
             .getOne()
         return info
+    } catch (error) {
+        throw error
+    }
+}
+
+export const createMatchMakingData = async (gameId, edgeGapRequestId) => {
+    try {
+        const newData = await db.getRepository("MatchMaking").save({
+            match_id: gameId,
+            edge_gap_request_id: edgeGapRequestId
+        })
+        return newData
+    } catch (error) {
+        throw error
+    }
+}
+
+export const getMatchMakingInfo = async (gameId) => {
+    try {
+        const data = await db.getRepository("MatchMaking").findOneBy({
+            match_id: gameId
+        })
+        const deployInfo = await getInstanceInfo(data.edge_gap_request_id)
+        return {
+            match_id: data.match_id,
+            ...deployInfo,
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
+export const closeMatch = async (gameId) => {
+    try {
+        await db.createQueryBuilder().update(Match).set({ is_over: true }).where(
+            "id=:id", { id: gameId }
+        ).execute()
+        const data = await db.getRepository("MatchMaking").findOneBy({
+            match_id: gameId
+        })
+        await deleteInstance(data.edge_gap_request_id)
+        return getMatchInfo(gameId)
     } catch (error) {
         throw error
     }

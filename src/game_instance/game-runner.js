@@ -1,99 +1,61 @@
-import net from 'net'
-import { spawn } from 'child_process'
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs'
+import axios from "axios"
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-
-const linuxProcessPath = __dirname + '/server.x86_64'
-
-const getNetworkIP = (callback) => {
-    var socket = net.createConnection(80, "www.google.com");
-    socket.on("connect", function () {
-        callback(socket.address().address);
-        socket.end();
-    });
-}
-
-let hostIP = "localhost"
-getNetworkIP((address) => {
-    hostIP = address
-    console.log("address: ", address)
-})
-
-const portMap = new Map()
-
-for (let i = 8001; i < 9999; i++) {
-    portMap.set(i, false)
-}
-
-const createHostData = () => {
-    let port = 8001
-    for (; port < 9999; port++) {
-        if (portMap.get(port)) { continue }
-        portMap.set(port, true)
-        break
-    }
-    return {
-        host: hostIP,
-        port
-    }
-}
-const saveInstanceLog = (name, logs) => {
-    const content = logs.join('\n')
-    const savePath = path.join(__dirname, "logs", `${name}.txt`)
-    fs.writeFile(savePath, content, 'utf8', err => {
-        if (err) {
-            console.error('save log error', err);
-        } else {
-            console.log('save logs successful')
-        }
-    });
-}
-const createInstance = (gameId, host, port) => {
-
-    const args = ["-game_id", `${gameId}`, "-host", `${host}`, "-port", `${port}`]
+export const getInstanceInfo = async (request_id) => {
     try {
-
-        const logName = `log_${gameId}`;
-        const logs = []
-        const child = spawn(linuxProcessPath, args)
-
-        child.stdout.on("data", (data) => {
-            logs.push(`match ${gameId} ${port} data: ${data}`)
-            console.log(`match ${gameId} ${port} data: ${data}`)
+        const { data } = await axios.get(`https://api.edgegap.com/v1/status/${request_id}`, {
+            headers: {
+                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+            }
         })
-        child.on("spawn", () => {
-            logs.push(`match ${gameId} ${port} spawned`)
-            console.log(`match ${gameId} ${port} spawned`)
-        })
-        child.on("disconnect", (code, signal) => {
-            logs.push(`match ${gameId} ${port} closed ${code} ${signal}`)
-            console.log(`match ${gameId} ${port} closed ${code} ${signal}`)
-        })
-        child.on("message", (code, signal) => {
-            logs.push(`match ${gameId} ${port} message ${code} ${signal}`)
-            console.log(`match ${gameId} ${port} message ${code} ${signal}`)
-        })
-        child.on("error", (code, signal) => {
-            logs.push(`match ${gameId} ${port} error ${code} ${signal}`)
-            console.log(`match ${gameId} ${port} error ${code} ${signal}`)
-        })
-        child.on("exit", (code, signal) => {
-            logs.push(`match ${gameId} ${port} exit ${code} ${signal}`)
-            console.log(`match ${gameId} ${port} exit ${code} ${signal}`)
-            saveInstanceLog(logName, logs)
-            portMap.set(port, false)
-        });
-
-    } catch (err) {
-        console.error(err)
+        return data
+    } catch (error) {
+        throw error
     }
 }
-export {
-    hostIP,
-    createInstance,
-    createHostData
+
+export const deleteInstance = async (request_id) => {
+    try {
+        const { data } = await axios.delete(`https://api.edgegap.com/v1/stop/${request_id}`, {
+            headers: {
+                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+            }
+        })
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+export const createInstance = async (gameId) => {
+    try {
+        const data = await axios.post('https://api.edgegap.com/v1/deploy', {
+
+            app_name: 'petopia',
+            version_name: 'dev_1.0.1',
+            ip_list: [
+                "1.0.3.13",
+                "1.1.8.214",
+                "1.0.1.23",
+                "1.0.86.161",
+                "1.0.23.70",
+                "1.1.7.218",
+                "1.0.32.76",
+                "1.1.2.67"
+            ],
+            env_vars: [
+                {
+                    "key": "GAME_ID",
+                    "value": `${gameId}`,
+                    "is_hidden": false
+                }
+            ]
+
+        }, {
+            headers: {
+                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+            }
+        })
+        return data
+    } catch (err) {
+        throw err
+    }
 }
