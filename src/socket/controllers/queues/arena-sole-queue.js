@@ -36,10 +36,11 @@ export class ArenaSoleQueue {
 
     addPlayer = (socket) => {
         const userId = socket.userId
-
+        const ip = socket.handshake.address
         console.log(`${userId} join match making: `, socket.findMatchData)
         const playerData = {
             userId: socket.userId,
+            ip: ip,
             isBot: false,
             findMatchData: {
                 ...socket.findMatchData,
@@ -80,6 +81,7 @@ export class ArenaSoleQueue {
         const heroData = randomHero()
         const playerData = {
             userId: this.randomBotId(),
+            ip: null,
             isBot: true,
             findMatchData: {
                 ...heroData,

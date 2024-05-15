@@ -25,22 +25,13 @@ export const deleteInstance = async (request_id) => {
         throw error
     }
 }
-export const createInstance = async (gameId) => {
+export const createInstance = async (gameId, listIP, version = 'dev_1.0.1') => {
     try {
         const data = await axios.post('https://api.edgegap.com/v1/deploy', {
 
             app_name: 'petopia',
             version_name: 'dev_1.0.1',
-            ip_list: [
-                "1.0.3.13",
-                "1.1.8.214",
-                "1.0.1.23",
-                "1.0.86.161",
-                "1.0.23.70",
-                "1.1.7.218",
-                "1.0.32.76",
-                "1.1.2.67"
-            ],
+            ip_list: listIP,
             env_vars: [
                 {
                     "key": "GAME_ID",
