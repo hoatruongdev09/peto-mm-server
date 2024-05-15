@@ -51,7 +51,7 @@ router.get('/matchmaking-info/:matchId', async (req, res) => {
     }
 })
 
-router.delete('/matchmaking-info/:matchId', async (req, res) => {
+router.post('/close-match/:matchId', async (req, res) => {
     const { matchId } = req.params
     try {
         res.status(200).json({
