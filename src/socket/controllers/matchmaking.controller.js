@@ -66,7 +66,7 @@ class MatchMakingController {
     createMatchForQueue = async (queue) => {
         try {
             const match = await createMatchInfo(queue.getMode())
-            const ipList = queue.player.filter(player => player.ip !== null).map(player => player.ip)
+            const ipList = queue.players.filter(player => player.ip !== null).map(player => player.ip)
 
             const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
@@ -82,7 +82,7 @@ class MatchMakingController {
                 }
             })
             await addPlayerToMatch(match.id, players)
-            console.log("create instance: ".ipList)
+            console.log("create instance: ", ipList)
             const { data } = await createInstance(match.id, ipList)
             console.log("match making data: ", data)
             await createMatchMakingData(match.id, data.request_id)
