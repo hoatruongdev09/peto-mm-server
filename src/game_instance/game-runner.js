@@ -30,7 +30,7 @@ export const createInstance = async (gameId, listIP, version = 'dev_1.0.1') => {
         const data = await axios.post('https://api.edgegap.com/v1/deploy', {
 
             app_name: 'petopia',
-            version_name: 'dev_1.0.1',
+            version_name: version,
             ip_list: listIP,
             env_vars: [
                 {
