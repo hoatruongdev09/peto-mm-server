@@ -42,7 +42,7 @@ export const createInstance = async (gameId, listIP, version = 'dev_1.0.1') => {
 
         }, {
             headers: {
-                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+                'Authorization': 'token 8dde5c01-53bb-402a-ac16-da2472501ce7',
             }
         })
         return data
