@@ -66,7 +66,7 @@ class MatchMakingController {
     createMatchForQueue = async (queue) => {
         try {
             const match = await createMatchInfo(queue.getMode())
-            const ipList = queue.players.filter(player => player.ip !== null).map(player => player.ip)
+            const ipList = queue.players.filter(player => player.ip !== null).map(player => player.ip.replace('::ffff:', ''))
 
             const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
