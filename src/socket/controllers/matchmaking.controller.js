@@ -84,7 +84,6 @@ class MatchMakingController {
             await addPlayerToMatch(match.id, players)
             console.log("create instance: ", ipList)
             const { data } = await createInstance(match.id, ipList)
-            console.log("match making data: ", data)
             await createMatchMakingData(match.id, data.request_id)
             queue.broadcast(socketEventId.matchCreated, {
                 match_id: match.id,
