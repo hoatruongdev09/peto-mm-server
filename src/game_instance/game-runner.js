@@ -4,7 +4,7 @@ export const getInstanceInfo = async (request_id) => {
     try {
         const { data } = await axios.get(`https://api.edgegap.com/v1/status/${request_id}`, {
             headers: {
-                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+                'Authorization': 'token 8dde5c01-53bb-402a-ac16-da2472501ce7',
             }
         })
         return data
@@ -17,7 +17,7 @@ export const deleteInstance = async (request_id) => {
     try {
         const { data } = await axios.delete(`https://api.edgegap.com/v1/stop/${request_id}`, {
             headers: {
-                'Authorization': 'token a9cc2159-e1f8-446f-80ff-27cb226fc79e',
+                'Authorization': 'token 8dde5c01-53bb-402a-ac16-da2472501ce7',
             }
         })
         return data
