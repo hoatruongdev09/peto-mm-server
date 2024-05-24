@@ -70,14 +70,15 @@ class MatchMakingController {
 
             const players = queue.players.map(player => {
                 const { userId, isBot, findMatchData } = player
-                const { hero, weapon, hero_skin, team, has_betting } = findMatchData
+                const { hero, weapon, hero_skin, team, has_betting, bot_id = -1 } = findMatchData
                 return {
                     user_id: userId,
-                    hero,
-                    weapon,
+                    hero: hero.id,
+                    weapon: weapon.id,
                     hero_skin,
                     team,
                     bot: isBot,
+                    bot_id: bot_id,
                     betting_amount: (has_betting != null && has_betting.toLowerCase()) === "true" ? MATCH_BETTING_AMOUNT : null
                 }
             })

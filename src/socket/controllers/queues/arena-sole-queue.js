@@ -5,7 +5,7 @@ export const ARENA_SOLE_QUEUE_TIMEOUT = 1000
 export const ARENA_SOLE_ADD_BOT_TIMEOUT = 5000
 
 import socketEventIds from "../../socket-event-id.js";
-import randomHero from './bot-data-set.js'
+import { randomConfig } from './bot-data-set.js'
 export class ArenaSoleQueue {
     constructor(averageElo, region, onConfirmMatch) {
         this.averageElo = averageElo
@@ -78,7 +78,7 @@ export class ArenaSoleQueue {
     }
 
     addBot = () => {
-        const heroData = randomHero()
+        const heroData = randomConfig()
         const playerData = {
             userId: this.randomBotId(),
             ip: null,

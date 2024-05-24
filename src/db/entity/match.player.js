@@ -13,10 +13,10 @@ const MatchPlayer = new EntitySchema({
             type: 'int'
         },
         hero: {
-            type: 'varchar'
+            type: 'int'
         },
         weapon: {
-            type: 'varchar'
+            type: 'int'
         },
         hero_skin: {
             type: 'int'
@@ -32,6 +32,10 @@ const MatchPlayer = new EntitySchema({
         bot: {
             type: 'boolean',
             default: false,
+        },
+        bot_id: {
+            type: 'int',
+            default: -1
         },
         betting_amount: {
             type: 'bigint',
